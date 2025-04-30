@@ -3,69 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projet 2 - Configuration d'un Serveur</title>
-    <link rel="stylesheet" href="1format portefolio.css">
+    <title>Projet HyperV - Configuration Réseau Professionnel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+        .important {
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #2c3e50;
+            color: white;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Projet 2 : Configuration d'un Serveur</h1>
+        <h1>Projet HyperV : Configuration Réseau Professionnel</h1>
     </header>
     <main>
         <section>
             <h2>Introduction</h2>
-            <p>Dans le cadre de mon BTS SIO, j'ai réalisé un projet consistant à configurer un serveur destiné à héberger un site web et gérer une base de données. Ce projet m'a permis de mettre en pratique mes compétences en administration système et en réseau.</p>
+            <p>Ce projet consiste à configurer un environnement réseau complet avec Hyper-V comprenant :</p>
+            <ul>
+                <li>Un contrôleur de domaine Active Directory</li>
+                <li>Un pare-feu pfSense</li>
+                <li>Un serveur de fichiers</li>
+                <li>Un serveur d'applications IIS</li>
+                <li>Des postes clients</li>
+            </ul>
+            <div class="important">
+                <strong>Objectif principal :</strong> Créer une infrastructure centralisée, sécurisée et facile à administrer pour une entreprise ou un environnement de formation.
+            </div>
         </section>
 
         <section>
-            <h2>Étapes de la configuration</h2>
+            <h2>Architecture du Réseau</h2>
+            <h3>Schéma des adresses IP</h3>
+            <ul>
+                <li><strong>Contrôleur de domaine :</strong> 192.168.100.1</li>
+                <li><strong>pfSense :</strong> 192.168.100.254</li>
+                <li><strong>Serveur de fichiers :</strong> 192.168.100.2</li>
+                <li><strong>Serveur d'applications :</strong> 192.168.100.3</li>
+                <li><strong>Poste administrateur :</strong> 192.168.100.10</li>
+                <li><strong>Postes clients :</strong> 192.168.100.100-200 (DHCP)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Configuration détaillée</h2>
+            
+            <h3>1. Contrôleur de domaine (Active Directory)</h3>
+            <p><strong>Pourquoi ?</strong> Pour centraliser la gestion des utilisateurs et des permissions.</p>
             <ol>
-                <li>
-                    <strong>Choix du système d'exploitation :</strong>
-                    <p>Pour ce projet, j'ai choisi d'utiliser <em>Ubuntu Server 22.04</em> en raison de sa stabilité et de sa large documentation.</p>
-                </li>
-                <li>
-                    <strong>Installation des services nécessaires :</strong>
-                    <p>J'ai installé les services suivants :
-                        <ul>
-                            <li><strong>Apache2 :</strong> pour servir les pages web.</li>
-                            <li><strong>MySQL :</strong> pour la gestion des bases de données.</li>
-                            <li><strong>PHP :</strong> pour l'exécution des scripts côté serveur.</li>
-                        </ul>
-                    </p>
-                </li>
-                <li>
-                    <strong>Configuration réseau :</strong>
-                    <p>J'ai attribué une adresse IP statique au serveur et configuré les règles du pare-feu avec <em>UFW</em> (Uncomplicated Firewall) pour autoriser uniquement les ports nécessaires (HTTP, HTTPS, SSH).</p>
-                </li>
-                <li>
-                    <strong>Déploiement d'un site web :</strong>
-                    <p>Un site web basique a été déployé pour tester le bon fonctionnement du serveur. J'ai utilisé un fichier PHP pour vérifier l'intégration avec MySQL.</p>
-                </li>
-                <li>
-                    <strong>Sauvegardes et monitoring :</strong>
-                    <p>J'ai configuré des sauvegardes automatiques avec <em>cron</em> et installé <em>Netdata</em> pour surveiller les performances du serveur en temps réel.</p>
-                </li>
+                <li>Configuration IP statique (192.168.100.1)</li>
+                <li>Installation des rôles AD et DNS</li>
+                <li>Création du domaine isma.corp</li>
+                <li>Création des utilisateurs (ex: admin.reseau)</li>
+            </ol>
+            
+            <h3>2. pfSense (Pare-feu et routeur)</h3>
+            <p><strong>Pourquoi ?</strong> Pour sécuriser le réseau et gérer le trafic.</p>
+            <ol>
+                <li>Configuration de l'interface LAN (192.168.100.254)</li>
+                <li>Activation du serveur DHCP</li>
+                <li>Configuration des règles de pare-feu</li>
+            </ol>
+            
+            <h3>3. Serveur de fichiers</h3>
+            <p><strong>Pourquoi ?</strong> Pour partager des documents de manière sécurisée.</p>
+            <ol>
+                <li>Jonction au domaine isma.corp</li>
+                <li>Création de partages avec permissions</li>
+            </ol>
+            
+            <h3>4. Serveur d'applications (IIS)</h3>
+            <p><strong>Pourquoi ?</strong> Pour héberger des applications web internes.</p>
+            <ol>
+                <li>Installation du rôle IIS</li>
+                <li>Création d'un site test</li>
+                <li>Configuration DNS (app.isma.corp)</li>
+            </ol>
+            
+            <h3>5. Postes clients</h3>
+            <p><strong>Pourquoi DHCP ?</strong> Pour simplifier la configuration des postes.</p>
+            <ol>
+                <li>Configuration automatique via pfSense</li>
+                <li>Jonction au domaine</li>
             </ol>
         </section>
 
         <section>
-            <h2>Résultats</h2>
-            <p>À l'issue de ce projet, le serveur était pleinement opérationnel :
+            <h2>Avantages de cette configuration</h2>
+            <div class="important">
                 <ul>
-                    <li>Les pages web s'affichaient correctement via le navigateur.</li>
-                    <li>Les connexions à la base de données étaient fonctionnelles.</li>
-                    <li>Le serveur était sécurisé et monitoré.</li>
+                    <li><strong>Centralisation :</strong> Tous les utilisateurs et ressources sont gérés depuis AD</li>
+                    <li><strong>Sécurité :</strong> Pare-feu + permissions AD protègent les données</li>
+                    <li><strong>Productivité :</strong> Accès simplifié aux ressources partagées</li>
+                    <li><strong>Évolutivité :</strong> Ajout facile de nouveaux serveurs ou utilisateurs</li>
                 </ul>
-            </p>
+            </div>
         </section>
 
         <section>
-            <h2>Conclusion</h2>
-            <p>Ce projet m'a permis de renforcer mes compétences en administration système et en gestion de serveurs. J'ai appris à anticiper et résoudre des problèmes techniques, ainsi qu'à optimiser la sécurité et la performance d'un serveur. Ces compétences sont essentielles pour un futur administrateur système.</p>
+            <h2>Documentation complémentaire</h2>
+            <p>Pour accéder à la documentation détaillée avec toutes les commandes et captures d'écran :</p>
+            <p><a href="projet_hyperv_documentation.xlsx" download>Télécharger le fichier Excel complet</a></p>
+            <p>Ce fichier contient :</p>
+            <ul>
+                <li>Les étapes pas à pas avec captures</li>
+                <li>Les commandes exactes à utiliser</li>
+                <li>Les configurations détaillées</li>
+                <li>Les vérifications à effectuer</li>
+            </ul>
         </section>
     </main>
     <footer>
-        <p>&copy; Ismaïla Cissokho</p>
+        <p>&copy; 2023 - Projet HyperV - Configuration Réseau</p>
     </footer>
 </body>
 </html>
